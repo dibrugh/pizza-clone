@@ -16,7 +16,7 @@ type Props = {
 	className?: string;
 };
 
-export default function CheckboxFiltersGroup({
+export const CheckboxFiltersGroup = ({
 	title,
 	items,
 	defaultItems,
@@ -25,7 +25,7 @@ export default function CheckboxFiltersGroup({
 	onChange,
 	defaultValue,
 	className,
-}: Props) {
+}: Props) => {
 	const [showAll, setShowAll] = useState(false);
 	const [searchValue, setSearchValue] = useState("");
 
@@ -77,4 +77,4 @@ export default function CheckboxFiltersGroup({
 			)}
 		</div>
 	);
-}
+};

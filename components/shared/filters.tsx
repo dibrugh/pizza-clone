@@ -3,7 +3,7 @@ import { Title } from "./title";
 import { FilterCheckbox } from "./filter-checkbox";
 import { Input } from "../ui";
 import { RangeSlider } from "./range-slider";
-import CheckboxFiltersGroup from "./checkbox-filters-group";
+import { CheckboxFiltersGroup } from "./checkbox-filters-group";
 
 type Props = { className?: string };
 
