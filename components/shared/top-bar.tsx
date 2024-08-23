@@ -8,7 +8,7 @@ type Props = {
 	className?: string;
 };
 
-export function TopBar({ className }: Props) {
+export const TopBar = ({ className }: Props) => {
 	return (
 		<div
 			className={cn(
@@ -22,4 +22,4 @@ export function TopBar({ className }: Props) {
 			</Container>
 		</div>
 	);
-}
+};

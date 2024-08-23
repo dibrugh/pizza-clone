@@ -4,7 +4,7 @@ import React from "react";
 
 type Props = { className?: string };
 
-export function SortPopup({ className }: Props) {
+export const SortPopup = ({ className }: Props) => {
 	return (
 		<div
 			className={cn(
@@ -17,4 +17,4 @@ export function SortPopup({ className }: Props) {
 			<b className="text-primary">популярное</b>
 		</div>
 	);
-}
+};

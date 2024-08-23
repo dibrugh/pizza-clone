@@ -15,7 +15,7 @@ const cats = [
 
 const activeIndex = 0;
 
-export function Categories({ className }: Props) {
+export const Categories = ({ className }: Props) => {
 	return (
 		<div
 			className={cn("inline-flex gap-1 bg-gray-50 p-1 rounded-2xl", className)}
@@ -34,4 +34,4 @@ export function Categories({ className }: Props) {
 			))}
 		</div>
 	);
-}
+};
