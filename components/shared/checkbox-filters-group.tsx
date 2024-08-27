@@ -1,19 +1,22 @@
 "use client";
 
 import { FilterChecboxProps, FilterCheckbox } from "./filter-checkbox";
-import { Input } from "../ui";
+import { Input, Skeleton } from "../ui";
 import { useState } from "react";
 
 type Item = FilterChecboxProps;
 type Props = {
 	title: string;
 	items: Item[];
-	defaultItems: Item[];
+	defaultItems?: Item[];
 	limit?: number;
+	loading?: boolean;
 	searchInputPlaceholder?: string;
-	onChange?: (values: string[]) => void;
+	onClickCheckbox?: (id: string) => void;
 	defaultValue?: string[];
+	selected?: Set<string>;
 	className?: string;
+	name?: string;
 };
 
 export const CheckboxFiltersGroup = ({
@@ -22,8 +25,11 @@ export const CheckboxFiltersGroup = ({
 	defaultItems,
 	limit = 5,
 	searchInputPlaceholder = "Поиск...",
-	onChange,
+	loading,
+	onClickCheckbox,
 	defaultValue,
+	name,
+	selected,
 	className,
 }: Props) => {
 	const [showAll, setShowAll] = useState(false);
@@ -32,11 +38,28 @@ export const CheckboxFiltersGroup = ({
 	const onChangeSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setSearchValue(e.target.value);
 	};
+
+	if (loading) {
+		return (
+			<div className={className}>
+				<p className="font-bold mb-3">{title}</p>
+
+				{...Array(limit)
+					.fill(0)
+					.map((_, index) => (
+						<Skeleton key={index} className="h-6 mb-4 rounded-[8px]" />
+					))}
+
+				<Skeleton className="w-28 h-6 mb-4 rounded-[8px]" />
+			</div>
+		);
+	}
+
 	const list = showAll
 		? items.filter((item) =>
 				item.text.toLowerCase().includes(searchValue.toLowerCase())
 		  )
-		: defaultItems.slice(0, limit);
+		: (defaultItems || items).slice(0, limit);
 	return (
 		<div className={className}>
 			<p className="font-bold mb-3">{title}</p>
@@ -53,13 +76,14 @@ export const CheckboxFiltersGroup = ({
 			<div className="flex flex-col gap-4 max-h-96 pr-2 overflow-auto scrollbar">
 				{list.map((item, i) => (
 					<FilterCheckbox
-						onCheckedChange={(ids) => {
-							console.log(ids);
+						onCheckedChange={() => {
+							onClickCheckbox?.(item.value);
 						}}
-						checked={false}
+						checked={selected?.has(item.value)}
 						key={i}
 						value={item.value}
 						text={item.text}
+						name={name}
 						endAdornment={item.endAdornment}
 					/>
 				))}
