@@ -1,20 +1,10 @@
-import { useEffect, useState } from "react";
 import { Api } from "@/services/api-client";
 import { Ingredient } from "@prisma/client";
-import { useSet } from "react-use";
+import { useState, useEffect } from "react";
 
-type ReturnProps = {
-	ingredients: Ingredient[];
-	loading: boolean;
-	selectedIngredients: Set<string>;
-	onToggle: (id: string) => void;
-};
-
-export const useFilterIngredients = (): ReturnProps => {
+export const useIngredients = () => {
 	const [ingredients, setIngredients] = useState<Ingredient[]>([]);
 	const [loading, setLoading] = useState(true);
-
-	const [selectedIds, { toggle }] = useSet(new Set<string>([]));
 
 	useEffect(() => {
 		async function fetchIngredients() {
@@ -35,7 +25,5 @@ export const useFilterIngredients = (): ReturnProps => {
 	return {
 		ingredients,
 		loading,
-		selectedIngredients: selectedIds,
-		onToggle: toggle,
 	};
 };
