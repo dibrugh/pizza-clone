@@ -13,3 +13,8 @@ export type CartItemDTO = CartItem & {
 export type CartDTO = {
 	items: CartItemDTO[];
 } & Cart;
+
+export type CreateCartItemValues = {
+	productVariantId: number;
+	ingredients?: number[];
+};

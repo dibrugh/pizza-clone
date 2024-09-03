@@ -1,8 +1,8 @@
-import { pizzaSizes, PizzaVariant } from "../constants/pizza";
+import { pizzaSizes, PizzaType } from "../constants/pizza";
 import { ProductVariant } from "@prisma/client";
 
 export const getAvailablePizzaSizes = (
-	variant: PizzaVariant,
+	variant: PizzaType,
 	variants: ProductVariant[]
 ) => {
 	const filteredPizzasByType = variants.filter(
