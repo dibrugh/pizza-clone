@@ -7,11 +7,11 @@ import { CreateCartItemValues } from "../services/dto/cart.dto";
 export type CartState = {
 	loading: boolean;
 	error: boolean;
-	items: CartStateItem[];
 	totalAmount: number;
+	items: CartStateItem[];
 
 	fetchCartItems: () => Promise<void>;
-	addCartItem: (values: any /* CreateCartItemValues */) => Promise<void>;
+	addCartItem: (values: CreateCartItemValues) => Promise<void>;
 	removeCartItem: (id: number) => Promise<void>;
 	updateItemQuantity: (id: number, quantity: number) => Promise<void>;
 };

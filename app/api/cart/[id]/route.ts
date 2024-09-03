@@ -9,7 +9,6 @@ export async function PATCH(
 	try {
 		const id = Number(params.id);
 		const data = (await req.json()) as { quantity: number };
-
 		const token = req.cookies.get("cartToken")?.value;
 
 		if (!token) {

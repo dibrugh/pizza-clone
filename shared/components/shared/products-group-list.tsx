@@ -33,7 +33,6 @@ export const ProductsGroupList = ({
 			setActiveCategoryId(categoryId);
 		}
 	}, [intersection?.isIntersecting, setActiveCategoryId, categoryId]);
-	console.log(items);
 	return (
 		<div className={className} id={title} ref={IntersectionRef}>
 			<Title text={title} size="lg" className="font-extrabold mb-5" />

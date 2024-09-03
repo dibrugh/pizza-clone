@@ -63,10 +63,9 @@ export const CartDrawer = ({
 				</SheetHeader>
 
 				<div className="-mx-6 mt-5 overflow-auto flex-1">
-					<div className="mb-2">
-						{items.map((item) => (
+					{items.map((item) => (
+						<div className="mb-2" key={item.id}>
 							<CartDrawerItem
-								key={item.id}
 								details={
 									item.pizzaSize && item.pizzaType
 										? getCartItemDetails(
@@ -82,8 +81,8 @@ export const CartDrawer = ({
 								}
 								onClickRemove={() => removeCartItem(item.id)}
 							/>
-						))}
-					</div>
+						</div>
+					))}
 				</div>
 
 				<SheetFooter className="-mx-6 bg-white p-8">

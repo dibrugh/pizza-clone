@@ -7,7 +7,6 @@ import { updateCartTotalAmount } from "@/shared/lib";
 
 export async function GET(req: NextRequest) {
 	try {
-		const userId = 1;
 		const token = req.cookies.get("cartToken")?.value;
 
 		if (!token) {
@@ -16,7 +15,11 @@ export async function GET(req: NextRequest) {
 
 		const userCart = await prisma.cart.findFirst({
 			where: {
-				OR: [{ userId }, { token }],
+				OR: [
+					{
+						token,
+					},
+				],
 			},
 			include: {
 				items: {
@@ -63,13 +66,12 @@ export async function POST(req: NextRequest) {
 				productVariantId: data.productVariantId,
 				ingredients: {
 					every: {
-						id: {
-							in: data.ingredients,
-						},
+						id: { in: data.ingredients },
 					},
 				},
 			},
 		});
+
 		// If cart item already exists update quantity + 1
 		if (findCartItem) {
 			await prisma.cartItem.update({
@@ -80,32 +82,22 @@ export async function POST(req: NextRequest) {
 					quantity: findCartItem.quantity + 1,
 				},
 			});
-		}
-
-		await prisma.cartItem.create({
-			data: {
-				cartId: userCart.id,
-				productVariantId: data.productVariantId,
-				quantity: 1,
-				ingredients: {
-					connect: data.ingredients?.map((id) => ({
-						id,
-					})),
+		} else {
+			await prisma.cartItem.create({
+				data: {
+					cartId: userCart.id,
+					productVariantId: data.productVariantId,
+					quantity: 1,
+					ingredients: { connect: data.ingredients?.map((id) => ({ id })) },
 				},
-			},
-		});
+			});
+		}
 
 		const updatedUserCart = await updateCartTotalAmount(token);
 
-		const response = NextResponse.json(updatedUserCart);
-
-		response.cookies.set({
-			name: "cartToken",
-			value: token,
-			maxAge: 60 * 60 * 24 * 7,
-		});
-
-		return response;
+		const resp = NextResponse.json(updatedUserCart);
+		resp.cookies.set("cartToken", token);
+		return resp;
 	} catch (error) {
 		console.log("[CART_POST] Server Error", error);
 		return NextResponse.json(
