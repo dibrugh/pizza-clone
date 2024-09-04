@@ -6,9 +6,9 @@ import {
 	TopBar,
 } from "@/shared/components/shared";
 import { prisma } from "@/prisma/prisma-client";
+import { Suspense } from "react";
 
 export default async function Home() {
-	// category provides list of products
 	const categories = await prisma.category.findMany({
 		include: {
 			products: {
@@ -31,7 +31,9 @@ export default async function Home() {
 				<div className="flex gap-[80px]">
 					{/* Filtration */}
 					<div className="w-[250px]">
-						<Filters />
+						<Suspense>
+							<Filters />
+						</Suspense>
 					</div>
 
 					{/* Catalog */}

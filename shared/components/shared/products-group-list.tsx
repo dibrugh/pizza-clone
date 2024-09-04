@@ -45,6 +45,7 @@ export const ProductsGroupList = ({
 						name={product.name}
 						imageUrl={product.imageUrl}
 						price={product.variants[0].price}
+						ingredients={product.ingredients}
 					/>
 				))}
 			</div>

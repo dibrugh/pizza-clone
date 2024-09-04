@@ -14,6 +14,7 @@ type Props = {
 	name: string;
 	ingredients: Ingredient[];
 	variants: ProductVariant[];
+	loading?: boolean;
 	onSubmit: (itemId: number, ingredients: number[]) => void;
 	className?: string;
 };
@@ -23,6 +24,7 @@ export const ChoosePizzaForm = ({
 	name,
 	ingredients,
 	variants,
+	loading,
 	onSubmit,
 	className,
 }: Props) => {
@@ -88,6 +90,7 @@ export const ChoosePizzaForm = ({
 				</div>
 
 				<Button
+					loading={loading}
 					onClick={handleClickAdd}
 					className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10"
 				>
