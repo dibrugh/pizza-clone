@@ -8,11 +8,15 @@ import Link from "next/link";
 import { SearchInput } from "./search-input";
 import { CartButton } from "./cart-button";
 
-type Props = { className?: string };
+type Props = { hasSearch?: boolean; hasCart?: boolean; className?: string };
 
-export const Header = ({ className }: Props) => {
+export const Header = ({
+	hasSearch = true,
+	hasCart = true,
+	className,
+}: Props) => {
 	return (
-		<header className={cn("border border-b", className)}>
+		<header className={cn(" border-b", className)}>
 			<Container className="flex items-center justify-between py-8">
 				{/* Left side */}
 				<Link href={"/"}>
@@ -27,9 +31,11 @@ export const Header = ({ className }: Props) => {
 					</div>
 				</Link>
 
-				<div className="mx-10 flex-1">
-					<SearchInput />
-				</div>
+				{hasSearch && (
+					<div className="mx-10 flex-1">
+						<SearchInput />
+					</div>
+				)}
 
 				{/* Right side */}
 				<div className="flex items-center gap-4">
@@ -38,7 +44,7 @@ export const Header = ({ className }: Props) => {
 						Войти
 					</Button>
 
-					<CartButton />
+					{hasCart && <CartButton />}
 				</div>
 			</Container>
 		</header>

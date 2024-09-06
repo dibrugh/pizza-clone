@@ -7,3 +7,4 @@ export { Checkbox } from "./checkbox";
 export { Dialog } from "./dialog";
 export { Skeleton } from "./skeleton";
 export { Input } from "./input";
+export { Textarea } from "./textarea";

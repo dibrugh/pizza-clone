@@ -1,9 +1,5 @@
 "use client";
 
-type Props = {
-	className?: string;
-};
-
 import {
 	Sheet,
 	SheetClose,
@@ -14,37 +10,18 @@ import {
 	SheetTrigger,
 } from "@/shared/components/ui/sheet";
 import Link from "next/link";
-import { PropsWithChildren, useEffect } from "react";
+import { PropsWithChildren } from "react";
 import { Button } from "../ui";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { CartDrawerItem, Title } from ".";
-import { useCartStore } from "@/shared/store";
 import { getCartItemDetails } from "@/shared/lib";
 import { PizzaType, PizzaSize } from "@/shared/constants/pizza";
 import Image from "next/image";
 import { cn } from "@/shared/lib/utils";
+import { useCart } from "@/shared/hooks";
 
-export const CartDrawer = ({
-	children,
-	className,
-}: PropsWithChildren<Props>) => {
-	const [
-		totalAmount,
-		items,
-		fetchCartItems,
-		updateItemQuantity,
-		removeCartItem,
-	] = useCartStore((state) => [
-		state.totalAmount,
-		state.items,
-		state.fetchCartItems,
-		state.updateItemQuantity,
-		state.removeCartItem,
-	]);
-
-	useEffect(() => {
-		fetchCartItems();
-	}, [fetchCartItems]);
+export const CartDrawer = ({ children }: PropsWithChildren) => {
+	const { totalAmount, items, updateItemQuantity, removeCartItem } = useCart();
 
 	const onClickCountButton = (
 		id: number,
@@ -106,15 +83,11 @@ export const CartDrawer = ({
 								{items.map((item) => (
 									<div className="mb-2" key={item.id}>
 										<CartDrawerItem
-											details={
-												item.pizzaSize && item.pizzaType
-													? getCartItemDetails(
-															item.ingredients,
-															item.pizzaType as PizzaType,
-															item.pizzaSize as PizzaSize
-													  )
-													: ""
-											}
+											details={getCartItemDetails(
+												item.ingredients,
+												item.pizzaType as PizzaType,
+												item.pizzaSize as PizzaSize
+											)}
 											{...item}
 											onClickCountButton={(type) =>
 												onClickCountButton(item.id, item.quantity, type)
@@ -136,7 +109,7 @@ export const CartDrawer = ({
 										<span className="font-bold text-lg">{totalAmount} ₽</span>
 									</div>
 
-									<Link href="/cart">
+									<Link href="/checkout">
 										<Button type="submit" className="w-full h-12 text-base">
 											Оформить заказ
 											<ArrowRight className="w-5 ml-2" />
