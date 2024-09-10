@@ -12,9 +12,12 @@ import {
 } from "@/shared/components";
 import { CheckoutFormSchema, checkoutFormSchema } from "@/shared/constants";
 import { useCart } from "@/shared/hooks";
-import { cn } from "@/shared/lib/utils";
+import { createOrder } from "@/app/actions";
+import toast from "react-hot-toast";
+import { useState } from "react";
 
 export default function CheckoutPage() {
+	const [submitting, setSubmitting] = useState(false);
 	const { totalAmount, items, loading, updateItemQuantity, removeCartItem } =
 		useCart();
 
@@ -30,8 +33,26 @@ export default function CheckoutPage() {
 		},
 	});
 
-	const onSubmit = (data: CheckoutFormSchema) => {
-		console.log(data);
+	const onSubmit = async (data: CheckoutFormSchema) => {
+		try {
+			setSubmitting(true);
+
+			const url = await createOrder(data);
+			toast.success("Order created successfully", {
+				icon: "👏",
+			});
+
+			if (url) {
+				location.href = url;
+			}
+		} catch (error) {
+			console.log(error);
+			toast.error("Failed to create order", {
+				icon: "🥲",
+			});
+		} finally {
+			setSubmitting(false);
+		}
 	};
 
 	const onClickCountButton = (
@@ -71,10 +92,8 @@ export default function CheckoutPage() {
 						{/* Right side */}
 						<div className="w-[450px]">
 							<CheckoutSidebar
-								{...{
-									totalAmount,
-									loading,
-								}}
+								loading={loading || submitting}
+								totalAmount={totalAmount}
 							/>
 						</div>
 					</div>
