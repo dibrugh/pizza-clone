@@ -2,7 +2,7 @@ import { cn } from "@/shared/lib/utils";
 
 type Props = {
 	title?: React.ReactNode;
-	value?: string;
+	value?: React.ReactNode;
 	className?: string;
 };
 

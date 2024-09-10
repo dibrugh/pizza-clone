@@ -12,12 +12,11 @@ import {
 } from "@/shared/components";
 import { CheckoutFormSchema, checkoutFormSchema } from "@/shared/constants";
 import { useCart } from "@/shared/hooks";
-
-const VAT = 15;
-const DELIVERY_PRICE = 250;
+import { cn } from "@/shared/lib/utils";
 
 export default function CheckoutPage() {
-	const { totalAmount, items, updateItemQuantity, removeCartItem } = useCart();
+	const { totalAmount, items, loading, updateItemQuantity, removeCartItem } =
+		useCart();
 
 	const form = useForm<CheckoutFormSchema>({
 		resolver: zodResolver(checkoutFormSchema),
@@ -44,9 +43,6 @@ export default function CheckoutPage() {
 		updateItemQuantity(id, newQuantity);
 	};
 
-	const vatPrice = totalAmount * (VAT / 100);
-	const deliveryPrice = totalAmount > 0 ? DELIVERY_PRICE : 0;
-	const totalPrice = totalAmount + vatPrice + deliveryPrice;
 	return (
 		<Container className="mt-10">
 			<Title
@@ -62,9 +58,14 @@ export default function CheckoutPage() {
 								onClickCountButton={onClickCountButton}
 								removeCartItem={removeCartItem}
 								items={items}
+								loading={loading}
 							/>
-							<CheckoutPersonalData />
-							<CheckoutAddressData />
+							<CheckoutPersonalData
+								className={loading ? "opacity-40 pointer-events-none" : ""}
+							/>
+							<CheckoutAddressData
+								className={loading ? "opacity-40 pointer-events-none" : ""}
+							/>
 						</div>
 
 						{/* Right side */}
@@ -72,9 +73,7 @@ export default function CheckoutPage() {
 							<CheckoutSidebar
 								{...{
 									totalAmount,
-									vatPrice,
-									deliveryPrice,
-									totalPrice,
+									loading,
 								}}
 							/>
 						</div>

@@ -1,28 +1,31 @@
 import { Package, Percent, Truck, ArrowRight } from "lucide-react";
-import { Button } from "../ui";
+import { Button, Skeleton } from "../ui";
 import { CheckoutItemDetails } from "./checkout-item-details";
 import { WhiteBlock } from "./white-block";
+import { cn } from "@/shared/lib/utils";
 
 type Props = {
 	totalAmount: number;
-	vatPrice: number;
-	deliveryPrice: number;
-	totalPrice: number;
+	loading?: boolean;
 	className?: string;
 };
 
-export const CheckoutSidebar = ({
-	className,
-	totalAmount,
-	vatPrice,
-	deliveryPrice,
-	totalPrice,
-}: Props) => {
+const VAT = 15;
+const DELIVERY_PRICE = 250;
+
+export const CheckoutSidebar = ({ className, totalAmount, loading }: Props) => {
+	const vatPrice = totalAmount * (VAT / 100);
+	const deliveryPrice = totalAmount > 0 ? DELIVERY_PRICE : 0;
+	const totalPrice = totalAmount + vatPrice + deliveryPrice;
 	return (
-		<WhiteBlock className="p-6 sticky top-4">
+		<WhiteBlock className={cn("p-6 sticky top-4", className)}>
 			<div className="flex flex-col gap-1">
 				<span className="text-xl">Итого: </span>
-				<span className="text-3xl font-extrabold">{totalPrice} ₽</span>
+				{loading ? (
+					<Skeleton className="w-full h-11" />
+				) : (
+					<span className="text-3xl font-extrabold h-11">{totalPrice} ₽</span>
+				)}
 			</div>
 
 			<CheckoutItemDetails
@@ -32,7 +35,13 @@ export const CheckoutSidebar = ({
 						Стоимость товаров:
 					</div>
 				}
-				value={`${totalAmount} ₽`}
+				value={
+					loading ? (
+						<Skeleton className="w-16 h-6 rounded-sm" />
+					) : (
+						`${totalAmount} ₽`
+					)
+				}
 			/>
 			<CheckoutItemDetails
 				title={
@@ -41,7 +50,13 @@ export const CheckoutSidebar = ({
 						Налоги:
 					</div>
 				}
-				value={`${vatPrice} ₽`}
+				value={
+					loading ? (
+						<Skeleton className="w-16 h-6 rounded-sm" />
+					) : (
+						`${vatPrice} ₽`
+					)
+				}
 			/>
 			<CheckoutItemDetails
 				title={
@@ -50,7 +65,13 @@ export const CheckoutSidebar = ({
 						Доставка:
 					</div>
 				}
-				value={`${deliveryPrice} ₽`}
+				value={
+					loading ? (
+						<Skeleton className="w-16 h-6 rounded-sm" />
+					) : (
+						`${deliveryPrice} ₽`
+					)
+				}
 			/>
 
 			<Button
