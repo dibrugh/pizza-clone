@@ -132,7 +132,7 @@ model Order {
     totalAmount Int         @default(0)
     status      OrderStatus
     // payment system identifier, like youmoney, stripe, etc
-    payementId  String?
+    paymentId   String?
 
     items Json
 

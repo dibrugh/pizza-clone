@@ -3,7 +3,7 @@
 import { prisma } from "@/prisma/prisma-client";
 import { PayOrderTemplate } from "@/shared/components";
 import { CheckoutFormSchema } from "@/shared/constants";
-import { sendEmail } from "@/shared/lib";
+import { createPayment, sendEmail } from "@/shared/lib";
 import { OrderStatus } from "@prisma/client";
 import { cookies } from "next/headers";
 import { Resend } from "resend";
@@ -74,6 +74,28 @@ export async function createOrder(data: CheckoutFormSchema) {
 			},
 		});
 
+		//! Create real payment (not mocked payment)
+		const paymentData = await createPayment({
+			amount: order.totalAmount,
+			orderId: order.id,
+			description: `Next Pizza order: ${order.id}`,
+		});
+
+		if (!paymentData) {
+			throw new Error("Failed to create payment");
+		}
+
+		await prisma.order.update({
+			where: {
+				id: order.id,
+			},
+			data: {
+				paymentId: paymentData.id,
+			},
+		});
+
+		const paymentUrl = paymentData.confirmation.confirmation_url;
+
 		// Send link to payment service (like, Stripe, YouMoney, etc)
 		await sendEmail(
 			data.email,
@@ -81,11 +103,11 @@ export async function createOrder(data: CheckoutFormSchema) {
 			PayOrderTemplate({
 				orderId: order.id,
 				totalAmount: order.totalAmount,
-				paymentUrl: "https://your-payment-url.com",
+				paymentUrl,
 			})
 		);
 
-		return "https://your-payment-url.com";
+		return paymentUrl;
 	} catch (error) {
 		console.log("[actions/createOrder] Server error", error);
 	}

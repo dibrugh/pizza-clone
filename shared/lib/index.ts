@@ -7,3 +7,4 @@ export { calcCartItemTotalPrice } from "./calc-cart-item-total-price";
 export { updateCartTotalAmount } from "./update-cart-total-amount";
 export { findPizzas } from "./find-pizzas";
 export { sendEmail } from "./send-email";
+export { createPayment } from "./create-payment";
