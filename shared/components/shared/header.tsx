@@ -1,12 +1,18 @@
+"use client";
+
 import { cn } from "@/shared/lib/utils";
-import React from "react";
+import { useEffect } from "react";
 import { Container } from "./container";
 import Image from "next/image";
 import { Button } from "../ui";
-import { ArrowRight, ShoppingCart, User } from "lucide-react";
+import { User } from "lucide-react";
 import Link from "next/link";
 import { SearchInput } from "./search-input";
 import { CartButton } from "./cart-button";
+import { useSearchParam } from "react-use";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
+import toast from "react-hot-toast";
 
 type Props = { hasSearch?: boolean; hasCart?: boolean; className?: string };
 
@@ -15,6 +21,29 @@ export const Header = ({
 	hasCart = true,
 	className,
 }: Props) => {
+	const searchParams = useSearchParams();
+	const router = useRouter();
+
+	useEffect(() => {
+		let toastMessage = "";
+
+		if (searchParams.has("paid")) {
+			toastMessage = "Заказ успешно оплачен! Информация отправлена на почту.";
+		}
+
+		if (searchParams.has("verified")) {
+			toastMessage = "Почта успешно подтверждена!";
+		}
+
+		if (toastMessage) {
+			setTimeout(() => {
+				router.replace("/");
+				toast.success(toastMessage, {
+					duration: 3000,
+				});
+			}, 1000);
+		}
+	}, []);
 	return (
 		<header className={cn(" border-b", className)}>
 			<Container className="flex items-center justify-between py-8">
