@@ -14,12 +14,16 @@ import { CheckoutFormSchema, checkoutFormSchema } from "@/shared/constants";
 import { useCart } from "@/shared/hooks";
 import { createOrder } from "@/app/actions";
 import toast from "react-hot-toast";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { Api } from "@/shared/services/api-client";
 
 export default function CheckoutPage() {
 	const [submitting, setSubmitting] = useState(false);
 	const { totalAmount, items, loading, updateItemQuantity, removeCartItem } =
 		useCart();
+
+	const { data: session } = useSession();
 
 	const form = useForm<CheckoutFormSchema>({
 		resolver: zodResolver(checkoutFormSchema),
@@ -32,6 +36,21 @@ export default function CheckoutPage() {
 			comment: "",
 		},
 	});
+
+	useEffect(() => {
+		async function fetchUserInfo() {
+			const data = await Api.auth.getMe();
+			const [firstName, lastName] = data.fullName.split(" ");
+
+			form.setValue("firstName", firstName);
+			form.setValue("lastName", lastName);
+			form.setValue("email", data.email);
+		}
+
+		if (session) {
+			fetchUserInfo();
+		}
+	}, [session]);
 
 	const onSubmit = async (data: CheckoutFormSchema) => {
 		try {

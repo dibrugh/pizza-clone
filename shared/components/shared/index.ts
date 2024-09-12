@@ -19,8 +19,10 @@ export { CartButton } from "./cart-button";
 export { CartDrawer } from "./cart-drawer";
 export { CountButton } from "./count-button";
 export { CartDrawerItem } from "./cart-drawer-item";
-export { ProductForm } from "./product-form";
 export { WhiteBlock } from "./white-block";
+
+export { ProductForm } from "./product-form";
+export { ProfileForm } from "./profile-form";
 
 export { CheckoutItem } from "./checkout-item";
 export { CheckoutItemDetails } from "./checkout-item-details";
@@ -33,6 +35,8 @@ export { ClearButton } from "./clear-button";
 
 export { Providers } from "./providers";
 export { ProfileButton } from "./profile-button";
+
+export { InfoBlock } from "./info-block";
 
 export * from "./form";
 export * from "./checkout";
