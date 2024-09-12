@@ -135,7 +135,7 @@ export const authOptions: AuthOptions = {
 
 				return true;
 			} catch (error) {
-				console.error("Error [signIn]: ", error);
+				console.log("Error [signIn]: ", error);
 				return false;
 			}
 		},
